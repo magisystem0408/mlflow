@@ -10,6 +10,7 @@ from mlflow.utils.openai_utils import (
     _OpenAIEnvVar,
 )
 from mlflow.utils.rest_utils import augmented_raise_for_status
+from security import safe_requests
 
 _logger = logging.getLogger(__name__)
 
@@ -215,7 +216,6 @@ class OpenAIDeploymentClient(BaseDeploymentClient):
         _check_openai_key()
 
         api_config = _get_api_config_without_openai_dep()
-        import requests
 
         if api_config.api_type in ("azure", "azure_ad", "azuread"):
             raise NotImplementedError(
@@ -225,8 +225,7 @@ class OpenAIDeploymentClient(BaseDeploymentClient):
             api_key = os.environ["OPENAI_API_KEY"]
             request_header = {"Authorization": f"Bearer {api_key}"}
 
-            response = requests.get(
-                f"https://api.openai.com/v1/models/{endpoint}",
+            response = safe_requests.get(f"https://api.openai.com/v1/models/{endpoint}",
                 headers=request_header,
             )
 

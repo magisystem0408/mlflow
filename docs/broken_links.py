@@ -8,6 +8,7 @@ import requests
 from scrapy.crawler import CrawlerProcess
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
+from security import safe_requests
 
 
 def get_safe_port():
@@ -26,7 +27,7 @@ def server(port):
         try:
             for _ in range(5):
                 try:
-                    if requests.get(f"http://localhost:{port}").ok:
+                    if safe_requests.get(f"http://localhost:{port}").ok:
                         break
                 except requests.exceptions.ConnectionError:
                     time.sleep(0.5)

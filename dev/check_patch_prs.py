@@ -5,7 +5,7 @@ import tempfile
 from dataclasses import dataclass
 
 import click
-import requests
+from security import safe_requests
 
 
 def get_release_branch(version):
@@ -72,8 +72,7 @@ def fetch_patch_prs(version):
     page = 1
     pulls = []
     while True:
-        response = requests.get(
-            f'https://api.github.com/search/issues?q=is:pr+repo:mlflow/mlflow+label:"{label}"&per_page={per_page}&page={page}',
+        response = safe_requests.get(f'https://api.github.com/search/issues?q=is:pr+repo:mlflow/mlflow+label:"{label}"&per_page={per_page}&page={page}',
         )
         response.raise_for_status()
         data = response.json()

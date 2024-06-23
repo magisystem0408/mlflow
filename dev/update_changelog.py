@@ -7,8 +7,8 @@ from pathlib import Path
 from typing import Any, List, NamedTuple
 
 import click
-import requests
 from packaging.version import Version
+from security import safe_requests
 
 
 def get_header_for_version(version):
@@ -124,8 +124,7 @@ def main(prev_version, release_version, remote):
         if not pr_num:
             continue
         print(f"Fetching PR #{pr_num}...")
-        resp = requests.get(
-            f"https://api.github.com/repos/mlflow/mlflow/pulls/{pr_num}",
+        resp = safe_requests.get(f"https://api.github.com/repos/mlflow/mlflow/pulls/{pr_num}",
             auth=("mlflow-automation", os.getenv("GITHUB_TOKEN")),
         )
         resp.raise_for_status()
