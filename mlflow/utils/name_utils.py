@@ -1,5 +1,5 @@
-import random
 import uuid
+import secrets
 
 _EXPERIMENT_ID_FIXED_WIDTH = 18
 
@@ -23,16 +23,16 @@ def _generate_unique_integer_id():
     # once cast back to int
     for s in random_str:
         if s == "0":
-            random_str = random_str + str(random.randint(0, 9))
+            random_str = random_str + str(secrets.SystemRandom().randint(0, 9))
         else:
             break
     return int(random_str)
 
 
 def _generate_string(sep, integer_scale):
-    predicate = random.choice(_GENERATOR_PREDICATES).lower()
-    noun = random.choice(_GENERATOR_NOUNS).lower()
-    num = random.randint(0, 10**integer_scale)
+    predicate = secrets.choice(_GENERATOR_PREDICATES).lower()
+    noun = secrets.choice(_GENERATOR_NOUNS).lower()
+    num = secrets.SystemRandom().randint(0, 10**integer_scale)
     return f"{predicate}{sep}{noun}{sep}{num}"
 
 

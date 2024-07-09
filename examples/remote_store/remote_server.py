@@ -1,5 +1,4 @@
 import os
-import random
 import shutil
 import sys
 import tempfile
@@ -14,6 +13,7 @@ from mlflow import (
     log_metric,
     log_param,
 )
+import secrets
 
 if __name__ == "__main__":
     print(f"Running {sys.argv[0]} with tracking URI {get_tracking_uri()}")
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     log_metric("foo", 5)
     log_metric("foo", 6)
     log_metric("foo", 7)
-    log_metric("random_int", random.randint(0, 100))
+    log_metric("random_int", secrets.SystemRandom().randint(0, 100))
     run_id = active_run().info.run_id
     # Get run metadata & data from the tracking server
     service = MlflowClient()
