@@ -35,6 +35,7 @@ from mlflow.tracking.artifact_utils import _download_artifact_from_uri
 from mlflow.utils import get_unique_resource_id
 from mlflow.utils.file_utils import TempDir
 from mlflow.utils.proto_json_utils import dump_input_data
+from security import safe_command
 
 DEFAULT_IMAGE_NAME = "mlflow-pyfunc"
 DEPLOYMENT_MODE_ADD = "add"
@@ -1154,7 +1155,7 @@ def run_local(name, model_uri, flavor=None, config=None):
         cmd += ["-e", f"{key}={value}"]
     cmd += ["--rm", image, "serve"]
     _logger.info("executing: %s", " ".join(cmd))
-    proc = Popen(cmd, stdout=sys.stdout, stderr=sys.stderr, text=True)
+    proc = safe_command.run(Popen, cmd, stdout=sys.stdout, stderr=sys.stderr, text=True)
 
     def _sigterm_handler(*_):
         _logger.info("received termination signal => killing docker process")

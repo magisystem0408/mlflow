@@ -6,6 +6,7 @@ import socket
 import subprocess
 import sys
 import time
+from security import safe_command
 
 
 def random_port() -> int:
@@ -17,8 +18,7 @@ def random_port() -> int:
 def main():
     gateway_port = random_port()
     gateway_host = "localhost"
-    with subprocess.Popen(
-        [
+    with safe_command.run(subprocess.Popen, [
             sys.executable,
             "-m",
             "mlflow",
@@ -31,8 +31,7 @@ def main():
             "--port",
             str(gateway_port),
         ]
-    ) as gateway, subprocess.Popen(
-        [
+    ) as gateway, safe_command.run(subprocess.Popen, [
             sys.executable,
             "-m",
             "mlflow",

@@ -10,6 +10,7 @@ from mlflow.deployments.server import app
 from mlflow.environment_variables import MLFLOW_DEPLOYMENTS_CONFIG
 from mlflow.gateway.config import _load_route_config
 from mlflow.gateway.utils import kill_child_processes
+from security import safe_command
 
 _logger = logging.getLogger(__name__)
 
@@ -57,8 +58,7 @@ class Runner:
         self.process = None
 
     def start(self) -> None:
-        self.process = subprocess.Popen(
-            [
+        self.process = safe_command.run(subprocess.Popen, [
                 sys.executable,
                 "-m",
                 "gunicorn",

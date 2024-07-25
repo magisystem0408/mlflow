@@ -54,6 +54,7 @@ from mlflow.utils.virtualenv import (
     _get_virtualenv_name,
     _install_python,
 )
+from security import safe_command
 
 _logger = logging.getLogger(__name__)
 
@@ -247,14 +248,13 @@ def _run_mlflow_run_cmd(mlflow_run_arr, env_map):
     # Launch `mlflow run` command as the leader of its own process group so that we can do a
     # best-effort cleanup of all its descendant processes if needed
     if sys.platform == "win32":
-        return subprocess.Popen(
-            mlflow_run_arr,
+        return safe_command.run(subprocess.Popen, mlflow_run_arr,
             env=final_env,
             text=True,
             creationflags=subprocess.CREATE_NEW_PROCESS_GROUP,
         )
     else:
-        return subprocess.Popen(mlflow_run_arr, env=final_env, text=True, preexec_fn=os.setsid)
+        return safe_command.run(subprocess.Popen, mlflow_run_arr, env=final_env, text=True, preexec_fn=os.setsid)
 
 
 def _run_entry_point(command, work_dir, experiment_id, run_id):
