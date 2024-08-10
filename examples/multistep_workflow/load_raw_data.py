@@ -21,7 +21,7 @@ def load_raw_data(url):
         local_dir = tempfile.mkdtemp()
         local_filename = os.path.join(local_dir, "ml-20m.zip")
         print(f"Downloading {url} to {local_filename}")
-        r = requests.get(url, stream=True)
+        r = requests.get(url, stream=True, timeout=60)
         with open(local_filename, "wb") as f:
             for chunk in r.iter_content(chunk_size=1024):
                 if chunk:  # filter out keep-alive new chunks

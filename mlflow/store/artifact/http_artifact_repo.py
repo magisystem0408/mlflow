@@ -164,7 +164,7 @@ class HttpArtifactRepository(ArtifactRepository, MultipartUploadMixin):
     @staticmethod
     def _upload_part(credential: MultipartUploadCredential, local_file, size, start_byte):
         data = read_chunk(local_file, size, start_byte)
-        response = requests.put(credential.url, data=data, headers=credential.headers)
+        response = requests.put(credential.url, data=data, headers=credential.headers, timeout=60)
         augmented_raise_for_status(response)
         return MultipartUploadPart(
             part_number=credential.part_number,

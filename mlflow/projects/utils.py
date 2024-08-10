@@ -243,7 +243,7 @@ def _fetch_zip_repo(uri):
     # ```mlflow.data.download_uri()`` when the API supports the same set of available stores as
     # the artifact repository (Azure, FTP, etc). See the following issue:
     # https://github.com/mlflow/mlflow/issues/763.
-    response = requests.get(uri)
+    response = requests.get(uri, timeout=60)
     try:
         augmented_raise_for_status(response)
     except requests.HTTPError as error:

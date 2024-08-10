@@ -32,5 +32,5 @@ predict_conf = pd.DataFrame(
 json_data = {"dataframe_split": predict_conf.to_dict(orient="split")}
 
 # Score model
-response = requests.post(url, json=json_data)
+response = requests.post(url, json=json_data, timeout=60)
 print(f"\nPyfunc 'predict_interval':\n${response.json()}")

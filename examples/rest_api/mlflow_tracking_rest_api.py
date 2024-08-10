@@ -35,7 +35,7 @@ class MlflowTrackingRestApi:
             "start_time": get_current_time_millis(),
             "user_id": _get_user_id(),
         }
-        r = requests.post(url, json=payload)
+        r = requests.post(url, json=payload, timeout=60)
         run_id = None
         if r.status_code == 200:
             run_id = r.json()["run"]["info"]["run_uuid"]
@@ -46,7 +46,7 @@ class MlflowTrackingRestApi:
     def search_experiments(self):
         """Get all experiments."""
         url = self.base_url + "/experiments/search"
-        r = requests.get(url)
+        r = requests.get(url, timeout=60)
         experiments = None
         if r.status_code == 200:
             experiments = r.json()["experiments"]
@@ -56,7 +56,7 @@ class MlflowTrackingRestApi:
         """Log a parameter dict for the given run."""
         url = self.base_url + "/runs/log-parameter"
         payload = {"run_id": self.run_id, "key": param["key"], "value": param["value"]}
-        r = requests.post(url, json=payload)
+        r = requests.post(url, json=payload, timeout=60)
         return r.status_code
 
     def log_metric(self, metric):
@@ -69,7 +69,7 @@ class MlflowTrackingRestApi:
             "timestamp": metric["timestamp"],
             "step": metric["step"],
         }
-        r = requests.post(url, json=payload)
+        r = requests.post(url, json=payload, timeout=60)
         return r.status_code
 
 

@@ -74,7 +74,7 @@ def fetch_patch_prs(version):
     while True:
         response = requests.get(
             f'https://api.github.com/search/issues?q=is:pr+repo:mlflow/mlflow+label:"{label}"&per_page={per_page}&page={page}',
-        )
+        timeout=60)
         response.raise_for_status()
         data = response.json()
         # Exclude closed PRs that are not merged

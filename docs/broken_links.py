@@ -26,7 +26,7 @@ def server(port):
         try:
             for _ in range(5):
                 try:
-                    if requests.get(f"http://localhost:{port}").ok:
+                    if requests.get(f"http://localhost:{port}", timeout=60).ok:
                         break
                 except requests.exceptions.ConnectionError:
                     time.sleep(0.5)

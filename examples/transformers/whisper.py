@@ -5,8 +5,8 @@ import mlflow
 
 # Acquire an audio file
 resp = requests.get(
-    "https://github.com/mlflow/mlflow/raw/master/tests/datasets/apollo11_launch.wav"
-)
+    "https://github.com/mlflow/mlflow/raw/master/tests/datasets/apollo11_launch.wav", 
+timeout=60)
 resp.raise_for_status()
 audio = resp.content
 

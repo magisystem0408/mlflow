@@ -47,7 +47,7 @@ def score_model(path, host, port):
             "dataframe_split": data,
         },
         headers={"Content-Type": "application/json"},
-    )
+    timeout=60)
 
     if response.status_code != 200:
         raise Exception(f"Status Code {response.status_code}. {response.text}")

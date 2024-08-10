@@ -1352,7 +1352,7 @@ def gateway_proxy_handler():
     request_type = request.method
     json_data = args.get("json_data", None)
 
-    response = requests.request(request_type, f"{target_uri}/{gateway_path}", json=json_data)
+    response = requests.request(request_type, f"{target_uri}/{gateway_path}", json=json_data, timeout=60)
 
     if response.status_code == 200:
         return response.json()
