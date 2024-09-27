@@ -13,6 +13,7 @@ from mlflow.deployments import PredictionsResponse
 from mlflow.exceptions import MlflowException
 from mlflow.pyfunc import scoring_server
 from mlflow.utils.proto_json_utils import dump_input_data
+from security import safe_requests
 
 _logger = logging.getLogger(__name__)
 
@@ -44,12 +45,12 @@ class ScoringServerClient(BaseScoringServerClient):
         self.url_prefix = f"http://{host}:{port}"
 
     def ping(self):
-        ping_status = requests.get(url=self.url_prefix + "/ping")
+        ping_status = safe_requests.get(url=self.url_prefix + "/ping")
         if ping_status.status_code != 200:
             raise Exception(f"ping failed (error code {ping_status.status_code})")
 
     def get_version(self):
-        resp_status = requests.get(url=self.url_prefix + "/version")
+        resp_status = safe_requests.get(url=self.url_prefix + "/version")
         if resp_status.status_code != 200:
             raise Exception(f"version failed (error code {resp_status.status_code})")
         return resp_status.text

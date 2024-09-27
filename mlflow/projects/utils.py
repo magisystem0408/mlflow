@@ -29,6 +29,7 @@ from mlflow.utils.mlflow_tags import (
     MLFLOW_USER,
 )
 from mlflow.utils.rest_utils import augmented_raise_for_status
+from security import safe_requests
 
 _FILE_URI_REGEX = re.compile(r"^file://.+")
 _ZIP_URI_REGEX = re.compile(r".+\.zip$")
@@ -243,7 +244,7 @@ def _fetch_zip_repo(uri):
     # ```mlflow.data.download_uri()`` when the API supports the same set of available stores as
     # the artifact repository (Azure, FTP, etc). See the following issue:
     # https://github.com/mlflow/mlflow/issues/763.
-    response = requests.get(uri)
+    response = safe_requests.get(uri)
     try:
         augmented_raise_for_status(response)
     except requests.HTTPError as error:
