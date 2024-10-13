@@ -2,7 +2,6 @@
 # This file is imported by download_cloud_file_chunk.py.
 # Importing mlflow is time-consuming and we want to avoid that in artifact download subprocesses.
 import os
-import random
 from functools import lru_cache
 
 import requests
@@ -11,6 +10,7 @@ from packaging.version import Version
 from requests.adapters import HTTPAdapter
 from requests.exceptions import HTTPError
 from urllib3.util import Retry
+import secrets
 
 # Response codes that generally indicate transient network failures and merit client retries,
 # based on guidance from cloud service providers
@@ -42,7 +42,7 @@ class JitteredRetry(Retry):
         """
         backoff_value = super().get_backoff_time()
         if self.backoff_jitter != 0.0:
-            backoff_value += random.random() * self.backoff_jitter
+            backoff_value += secrets.SystemRandom().random() * self.backoff_jitter
         # The attribute `BACKOFF_MAX` was renamed to `DEFAULT_BACKOFF_MAX` in this commit:
         # https://github.com/urllib3/urllib3/commit/f69b1c89f885a74429cabdee2673e030b35979f0
         # which was part of the major release of 2.0 for urllib3 and the support for both
