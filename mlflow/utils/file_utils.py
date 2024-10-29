@@ -30,6 +30,7 @@ from urllib.request import pathname2url
 import yaml
 
 from mlflow.protos.databricks_pb2 import INVALID_PARAMETER_VALUE
+from security import safe_command
 
 try:
     from yaml import CSafeDumper as YamlSafeDumper
@@ -736,8 +737,7 @@ def parallelized_download_file_using_http_uri(
 
     def run_download(chunk: _Chunk):
         try:
-            subprocess.run(
-                [
+            safe_command.run(subprocess.run, [
                     sys.executable,
                     download_cloud_file_chunk.__file__,
                     "--range-start",

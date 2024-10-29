@@ -27,6 +27,7 @@ from mlflow.utils.environment import _PythonEnv
 from mlflow.utils.file_utils import read_yaml
 from mlflow.utils.virtualenv import _get_or_create_virtualenv
 from mlflow.version import VERSION as MLFLOW_VERSION
+from security import safe_command
 
 MODEL_PATH = "/opt/ml/model"
 
@@ -276,7 +277,7 @@ def _serve_mleap():
     # Invoke `Popen` with a single string command in the shell to support wildcard usage
     # with the mlflow jar version.
     serve_cmd = " ".join(serve_cmd)
-    mleap = Popen(serve_cmd, shell=True)
+    mleap = safe_command.run(Popen, serve_cmd, shell=True)
     signal.signal(signal.SIGTERM, lambda a, b: _sigterm_handler(pids=[mleap.pid]))
     awaited_pids = _await_subprocess_exit_any(procs=[mleap])
     _sigterm_handler(awaited_pids)

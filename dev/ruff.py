@@ -2,6 +2,7 @@ import os
 import re
 import subprocess
 import sys
+from security import safe_command
 
 RUFF = [sys.executable, "-m", "ruff", "check"]
 MESSAGE_REGEX = re.compile(r"^.+:\d+:\d+: ([A-Z0-9]+) (\[\*\] )?.+$")
@@ -29,8 +30,7 @@ def transform(stdout: str, is_maintainer: bool) -> str:
 
 def main():
     if "NO_FIX" in os.environ:
-        with subprocess.Popen(
-            [
+        with safe_command.run(subprocess.Popen, [
                 *RUFF,
                 *sys.argv[1:],
             ],
@@ -44,8 +44,7 @@ def main():
             sys.stderr.write(stderr)
             sys.exit(prc.returncode)
     else:
-        with subprocess.Popen(
-            [
+        with safe_command.run(subprocess.Popen, [
                 *RUFF,
                 "--fix",
                 "--exit-non-zero-on-fix",
