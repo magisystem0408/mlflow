@@ -13,7 +13,7 @@ def fetch_changed_files(pr: str) -> list[str]:
     per_page = 100
     changed_files = []
     for page in range(1, 100):
-        r = requests.get(url, params={"page": page, "per_page": per_page})
+        r = requests.get(url, params={"page": page, "per_page": per_page}, timeout=60)
         r.raise_for_status()
         files = r.json()
         changed_files.extend(f["filename"] for f in files)

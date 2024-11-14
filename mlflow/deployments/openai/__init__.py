@@ -201,7 +201,7 @@ class OpenAIDeploymentClient(BaseDeploymentClient):
             response = requests.get(
                 "https://api.openai.com/v1/models",
                 headers=request_header,
-            )
+            timeout=60)
 
             augmented_raise_for_status(response)
 
@@ -228,7 +228,7 @@ class OpenAIDeploymentClient(BaseDeploymentClient):
             response = requests.get(
                 f"https://api.openai.com/v1/models/{endpoint}",
                 headers=request_header,
-            )
+            timeout=60)
 
             augmented_raise_for_status(response)
 
