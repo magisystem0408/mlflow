@@ -1,10 +1,10 @@
-import random
 
 import spacy
 from packaging.version import Version
 from spacy.util import compounding, minibatch
 
 import mlflow.spacy
+import secrets
 
 IS_SPACY_VERSION_NEWER_THAN_OR_EQUAL_TO_3_0_0 = Version(spacy.__version__) >= Version("3.0.0")
 
@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
     nlp.begin_training()
     for itn in range(params["n_iter"]):
-        random.shuffle(TRAIN_DATA)
+        secrets.SystemRandom().shuffle(TRAIN_DATA)
         losses = {}
         # batch up the examples using spaCy's minibatch
         batches = minibatch(TRAIN_DATA, size=compounding(4.0, 32.0, 1.001))
