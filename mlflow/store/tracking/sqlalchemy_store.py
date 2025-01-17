@@ -1,7 +1,6 @@
 import json
 import logging
 import math
-import random
 import threading
 import time
 import uuid
@@ -92,6 +91,7 @@ from mlflow.utils.validation import (
     _validate_tag,
     _validate_trace_tag,
 )
+import secrets
 
 _logger = logging.getLogger(__name__)
 
@@ -1233,7 +1233,7 @@ class SqlAlchemyStore(AbstractStore):
                             )
                         )
                     sleep_duration = (2**attempt_number) - 1
-                    sleep_duration += random.uniform(0, 1)
+                    sleep_duration += secrets.SystemRandom().uniform(0, 1)
                     time.sleep(sleep_duration)
                     _try_insert_tags(attempt_number + 1, max_retries=max_retries)
 
