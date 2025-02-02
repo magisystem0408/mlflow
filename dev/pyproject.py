@@ -9,6 +9,7 @@ from pathlib import Path
 import toml
 import yaml
 from packaging.version import Version
+from security import safe_command
 
 SEPARATOR = """
 # Package metadata: can't be updated manually, use dev/pyproject.py
@@ -198,7 +199,7 @@ def build(skinny: bool) -> None:
             f.write(original)
 
     if taplo := shutil.which("taplo"):
-        subprocess.run([taplo, "fmt", out_path], check=True)
+        safe_command.run(subprocess.run, [taplo, "fmt", out_path], check=True)
 
 
 def main() -> None:

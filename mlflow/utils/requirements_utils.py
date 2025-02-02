@@ -33,6 +33,7 @@ from mlflow.utils.databricks_utils import (
     get_databricks_env_vars,
     is_in_databricks_runtime,
 )
+from security import safe_command
 
 _logger = logging.getLogger(__name__)
 
@@ -204,7 +205,7 @@ def _run_command(cmd, timeout_seconds, env=None):
     """
     Runs the specified command. If it exits with non-zero status, `MlflowException` is raised.
     """
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+    proc = safe_command.run(subprocess.Popen, cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
     timer = Timer(timeout_seconds, proc.kill)
     try:
         timer.start()
