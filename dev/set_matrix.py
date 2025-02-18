@@ -117,7 +117,7 @@ class MatrixItem(BaseModel):
 def read_yaml(location, if_error=None):
     try:
         if re.match(r"^https?://", location):
-            resp = requests.get(location)
+            resp = requests.get(location, timeout=60)
             resp.raise_for_status()
             return yaml.safe_load(resp.text)
         else:
@@ -246,7 +246,7 @@ def get_java_version(java: Optional[Dict[str, str]], version: str) -> str:
 
 @functools.lru_cache(maxsize=128)
 def pypi_json(package: str) -> Dict[str, Any]:
-    resp = requests.get(f"https://pypi.org/pypi/{package}/json")
+    resp = requests.get(f"https://pypi.org/pypi/{package}/json", timeout=60)
     resp.raise_for_status()
     return resp.json()
 

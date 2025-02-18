@@ -44,12 +44,12 @@ class ScoringServerClient(BaseScoringServerClient):
         self.url_prefix = f"http://{host}:{port}"
 
     def ping(self):
-        ping_status = requests.get(url=self.url_prefix + "/ping")
+        ping_status = requests.get(url=self.url_prefix + "/ping", timeout=60)
         if ping_status.status_code != 200:
             raise Exception(f"ping failed (error code {ping_status.status_code})")
 
     def get_version(self):
-        resp_status = requests.get(url=self.url_prefix + "/version")
+        resp_status = requests.get(url=self.url_prefix + "/version", timeout=60)
         if resp_status.status_code != 200:
             raise Exception(f"version failed (error code {resp_status.status_code})")
         return resp_status.text
@@ -85,7 +85,7 @@ class ScoringServerClient(BaseScoringServerClient):
             url=self.url_prefix + "/invocations",
             data=dump_input_data(data, params=params),
             headers={"Content-Type": scoring_server.CONTENT_TYPE_JSON},
-        )
+        timeout=60)
         if response.status_code != 200:
             raise Exception(
                 f"Invocation failed (error code {response.status_code}, response: {response.text})"

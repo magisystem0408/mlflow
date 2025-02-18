@@ -28,7 +28,7 @@ def download_input():
 
     url = "http://download.tensorflow.org/example_images/flower_photos.tgz"
     print("downloading '{}' into '{}'".format(url, os.path.abspath("flower_photos.tgz")))
-    r = requests.get(url)
+    r = requests.get(url, timeout=60)
     with open("flower_photos.tgz", "wb") as f:
         f.write(r.content)
 
