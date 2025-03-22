@@ -190,7 +190,7 @@ class BaseRecipe:
         """
         import jinja2
 
-        j2_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+        j2_env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)), autoescape=True)
         recipe_dag_template = j2_env.get_template("resources/recipe_dag_template.html").render(
             {
                 "recipe_yaml_help": {
