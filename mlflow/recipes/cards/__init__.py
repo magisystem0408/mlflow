@@ -6,7 +6,6 @@ import logging
 import os
 import pathlib
 import pickle
-import random
 import re
 import string
 from io import StringIO
@@ -15,6 +14,7 @@ from typing import Optional, Union
 from packaging.version import Version
 
 from mlflow.exceptions import INVALID_PARAMETER_VALUE, MlflowException
+import secrets
 
 CARD_PICKLE_NAME = "card.pkl"
 CARD_HTML_NAME = "card.html"
@@ -205,7 +205,7 @@ class BaseCard:
 
         def get_random_id(length=6):
             return "".join(
-                random.choice(string.ascii_lowercase + string.digits) for _ in range(length)
+                secrets.choice(string.ascii_lowercase + string.digits) for _ in range(length)
             )
 
         base_template_path = os.path.join(os.path.dirname(__file__), "templates")
