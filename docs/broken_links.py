@@ -8,6 +8,7 @@ import requests
 from scrapy.crawler import CrawlerProcess
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
+from security import safe_command
 
 
 def get_safe_port():
@@ -18,8 +19,7 @@ def get_safe_port():
 
 @contextlib.contextmanager
 def server(port):
-    with subprocess.Popen(
-        [sys.executable, "-m", "http.server", str(port), "--directory", "build/html"],
+    with safe_command.run(subprocess.Popen, [sys.executable, "-m", "http.server", str(port), "--directory", "build/html"],
         stderr=subprocess.DEVNULL,
         stdout=subprocess.DEVNULL,
     ) as prc:

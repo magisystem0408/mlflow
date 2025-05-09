@@ -41,6 +41,7 @@ from mlflow.utils.virtualenv import (
     _get_pip_install_mlflow,
 )
 from mlflow.version import VERSION
+from security import safe_command
 
 _logger = logging.getLogger(__name__)
 
@@ -296,8 +297,7 @@ class PyFuncBackend(FlavorBackend):
             if not is_windows():
                 command = ["bash", "-c", command]
 
-            child_proc = subprocess.Popen(
-                command,
+            child_proc = safe_command.run(subprocess.Popen, command,
                 env=command_env,
                 preexec_fn=setup_sigterm_on_parent_death,
                 stdout=stdout,
@@ -335,8 +335,7 @@ class PyFuncBackend(FlavorBackend):
             return True
         conda_path = get_conda_bin_executable("conda")
         try:
-            p = subprocess.Popen(
-                [conda_path, "--version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            p = safe_command.run(subprocess.Popen, [conda_path, "--version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
             )
             _, _ = p.communicate()
             return p.wait() == 0
