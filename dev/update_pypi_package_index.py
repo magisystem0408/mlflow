@@ -45,7 +45,7 @@ def main(args):
                         package_names.add(package_name)
 
     index_url = "https://pypi.org/simple/"
-    raw_index_html = requests.get(index_url).text
+    raw_index_html = requests.get(index_url, timeout=60).text
 
     parser = PyPIHTMLParser()
     parser.feed(raw_index_html)

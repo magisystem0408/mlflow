@@ -127,7 +127,7 @@ def main(prev_version, release_version, remote):
         resp = requests.get(
             f"https://api.github.com/repos/mlflow/mlflow/pulls/{pr_num}",
             auth=("mlflow-automation", os.getenv("GITHUB_TOKEN")),
-        )
+        timeout=60)
         resp.raise_for_status()
         pr = resp.json()
         prs.append(
