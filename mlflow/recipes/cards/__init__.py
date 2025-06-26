@@ -40,7 +40,7 @@ class CardTab:
         self.name = name
         self.template = template
 
-        j2_env = jinja2.Environment()
+        j2_env = jinja2.Environment(autoescape=True)
         self._variables = jinja2_meta.find_undeclared_variables(j2_env.parse(template))
         self._context = {}
 
@@ -209,7 +209,7 @@ class BaseCard:
             )
 
         base_template_path = os.path.join(os.path.dirname(__file__), "templates")
-        j2_env = jinja2.Environment(loader=jinja2.FileSystemLoader(base_template_path))
+        j2_env = jinja2.Environment(loader=jinja2.FileSystemLoader(base_template_path), autoescape=True)
         tab_list = [(name, tab.to_html()) for name, tab in self._tabs]
         page_id = get_random_id()
         return j2_env.get_template(self._template_name).render(
