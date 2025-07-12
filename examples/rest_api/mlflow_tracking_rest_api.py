@@ -16,6 +16,7 @@ import pwd
 import requests
 
 from mlflow.utils.time import get_current_time_millis
+from security import safe_requests
 
 _DEFAULT_USER_ID = "unknown"
 
@@ -46,7 +47,7 @@ class MlflowTrackingRestApi:
     def search_experiments(self):
         """Get all experiments."""
         url = self.base_url + "/experiments/search"
-        r = requests.get(url)
+        r = safe_requests.get(url)
         experiments = None
         if r.status_code == 200:
             experiments = r.json()["experiments"]

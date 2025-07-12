@@ -33,13 +33,12 @@ import shutil
 import sys
 from collections import defaultdict
 from typing import Any, Dict, List, Optional
-
-import requests
 import yaml
 from packaging.specifiers import SpecifierSet
 from packaging.version import InvalidVersion
 from packaging.version import Version as OriginalVersion
 from pydantic import BaseModel, validator
+from security import safe_requests
 
 VERSIONS_YAML_PATH = "mlflow/ml-package-versions.yml"
 DEV_VERSION = "dev"
@@ -117,7 +116,7 @@ class MatrixItem(BaseModel):
 def read_yaml(location, if_error=None):
     try:
         if re.match(r"^https?://", location):
-            resp = requests.get(location)
+            resp = safe_requests.get(location)
             resp.raise_for_status()
             return yaml.safe_load(resp.text)
         else:
@@ -246,7 +245,7 @@ def get_java_version(java: Optional[Dict[str, str]], version: str) -> str:
 
 @functools.lru_cache(maxsize=128)
 def pypi_json(package: str) -> Dict[str, Any]:
-    resp = requests.get(f"https://pypi.org/pypi/{package}/json")
+    resp = safe_requests.get(f"https://pypi.org/pypi/{package}/json")
     resp.raise_for_status()
     return resp.json()
 

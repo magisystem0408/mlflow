@@ -4,15 +4,14 @@ specification (e.g. requirements/core-requirements.yaml) to the maximum availabl
 """
 
 import argparse
-
-import requests
 from packaging.version import InvalidVersion, Version
 from ruamel.yaml import YAML
+from security import safe_requests
 
 
 def get_latest_major_version(package_name: str) -> int:
     url = f"https://pypi.org/pypi/{package_name}/json"
-    response = requests.get(url)
+    response = safe_requests.get(url)
     response.raise_for_status()
     data = response.json()
     versions = []
