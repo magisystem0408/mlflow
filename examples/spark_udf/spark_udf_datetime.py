@@ -1,5 +1,4 @@
 import datetime
-import random
 
 from pyspark.sql import SparkSession
 from sklearn.compose import ColumnTransformer
@@ -9,6 +8,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
 
 import mlflow
+import secrets
 
 
 def print_with_title(title, *args):
@@ -27,7 +27,7 @@ def extract_month(df):
 def main():
     X, y = load_iris(as_frame=True, return_X_y=True)
     X = X.assign(
-        timestamp=[datetime.datetime(2022, random.randint(1, 12), 1) for _ in range(len(X))]
+        timestamp=[datetime.datetime(2022, secrets.SystemRandom().randint(1, 12), 1) for _ in range(len(X))]
     )
     print_with_title("Ran input", X.head(30), X.dtypes)
 
