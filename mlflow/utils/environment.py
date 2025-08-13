@@ -24,6 +24,7 @@ from mlflow.utils.requirements_utils import (
 )
 from mlflow.utils.timeout import MlflowTimeoutError, run_with_timeout
 from mlflow.version import VERSION
+from security import safe_command
 
 _logger = logging.getLogger(__name__)
 
@@ -701,8 +702,7 @@ def _validate_version_constraints(requirements):
         tmp_file_name = tmp_file.name
 
     try:
-        subprocess.run(
-            [sys.executable, "-m", "pip", "install", "--dry-run", "-r", tmp_file_name],
+        safe_command.run(subprocess.run, [sys.executable, "-m", "pip", "install", "--dry-run", "-r", tmp_file_name],
             check=True,
             capture_output=True,
         )

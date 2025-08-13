@@ -4,6 +4,7 @@ import subprocess
 import sys
 
 from mlflow.utils.os import is_windows
+from security import safe_command
 
 
 class ShellCommandException(Exception):
@@ -95,8 +96,7 @@ def _exec_cmd(
             # https://docs.python.org/3/library/subprocess.html#subprocess.run
             kwargs["stderr"] = subprocess.STDOUT
 
-    process = subprocess.Popen(
-        cmd,
+    process = safe_command.run(subprocess.Popen, cmd,
         env=env,
         text=True,
         **kwargs,

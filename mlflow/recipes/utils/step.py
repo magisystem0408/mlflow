@@ -15,6 +15,7 @@ from mlflow.utils.databricks_utils import (
     is_running_in_ipython_environment,
 )
 from mlflow.utils.os import is_windows
+from security import safe_command
 
 _logger = logging.getLogger(__name__)
 
@@ -115,7 +116,7 @@ def display_html(html_data: Optional[str] = None, html_file_path: Optional[str] 
         ):
             _logger.info(f"Opening HTML file at: '{html_file_path}'")
             try:
-                subprocess.run([open_tool, html_file_path], check=True)
+                safe_command.run(subprocess.run, [open_tool, html_file_path], check=True)
             except Exception as e:
                 _logger.warning(
                     f"Encountered unexpected error opening the html page."
