@@ -23,6 +23,7 @@ from mlflow.utils.environment import (
 )
 from mlflow.utils.model_utils import _validate_and_prepare_target_save_path
 from mlflow.utils.uri import get_databricks_profile_uri_from_artifact_uri
+from security import safe_command
 
 _WHEELS_FOLDER_NAME = "wheels"
 _ORIGINAL_REQ_FILE_NAME = "original_requirements.txt"
@@ -222,8 +223,7 @@ class WheeledModel:
         pip_wheel_options = MLFLOW_WHEELED_MODEL_PIP_DOWNLOAD_OPTIONS.get()
 
         try:
-            subprocess.run(
-                [
+            safe_command.run(subprocess.run, [
                     sys.executable,
                     "-m",
                     "pip",
